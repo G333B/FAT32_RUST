@@ -3,4 +3,10 @@ name = "fat32"
 version = "0.1.0"
 edition = "2024"
 
-[dependencies]
+[lib]
+name = "fat32"
+path = "src/lib.rs"
+
+[[bin]]
+name = "fat32-cli"
+path = "src/main.rs"
