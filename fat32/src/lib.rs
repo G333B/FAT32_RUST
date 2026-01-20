@@ -4,10 +4,12 @@ extern crate alloc;
 pub mod error;
 pub mod boot_sector;
 pub mod directory;
+pub mod fat_table;
 
 pub use error::{Fat32Error, Result};
 pub use boot_sector::BootSector;
 pub use directory::{DirectoryEntry, FileAttributes};
+pub use fat_table::FatTable;
 
 pub trait BlockDevice {
     fn read_sector(&mut self, sector: u32, buffer: &mut [u8]) -> Result<()>;

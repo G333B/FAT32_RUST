@@ -42,7 +42,12 @@ impl BootSector {
     pub unsafe fn from_bytes(data: &[u8]) -> Self {
         unsafe { core::ptr::read_unaligned(data.as_ptr() as *const BootSector) }
     }
-
+    pub fn bytes_per_sector(&self) -> u16 {
+        self.bytes_per_sector
+    }
+    pub fn sectors_per_cluster(&self) -> u8 {
+        self.sectors_per_cluster
+    }
     /// Vérifier que le boot sector est valide
     pub fn validate(&self) -> Result<()> {
         // signature
