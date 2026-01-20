@@ -1,5 +1,8 @@
 use core::fmt;
 
+impl std::error::Error for Fat32Error {}
+
+
 pub type Result<T> = core::result::Result<T, Fat32Error>;
 
 /// Les différentes erreurs possibles
@@ -14,6 +17,7 @@ pub enum Fat32Error {
     IoError,
     BufferTooSmall,
     InvalidEntry,
+    Fat32Error,
 }
 
 impl fmt::Display for Fat32Error {

@@ -71,7 +71,7 @@ impl<D: BlockDevice> Fat32FileSystem<D> {
             .ok_or(Fat32Error::NotFound)?;
 
         // Fichier vide
-        if entry.file_size == 0 {
+        if entry.file_size() == 0 {
             return Ok(Vec::new());
         }
 
@@ -86,7 +86,7 @@ impl<D: BlockDevice> Fat32FileSystem<D> {
         }
 
         // Tronquer à la vraie taille
-        data.truncate(entry.file_size as usize);
+        data.truncate(entry.file_size() as usize);
         Ok(data)
     }
 
@@ -137,7 +137,7 @@ impl<D: BlockDevice> Fat32FileSystem<D> {
     }
 
     /// Séparer un chemin en dossier + nom de fichier
-    fn parse_path(&mut self, path: &str) -> Result<(u32, &str)> {
+    fn parse_path<'a>(&mut self, path: &'a str) -> Result<(u32, &'a str)> {
         let (dir, name) = if let Some(pos) = path.rfind('/') {
             let (dir_path, name) = path.split_at(pos);
             (dir_path, &name[1..])
@@ -228,6 +228,7 @@ impl<D: BlockDevice> Fat32FileSystem<D> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::vec;
 
     struct MockDevice {
         data: Vec<u8>,
