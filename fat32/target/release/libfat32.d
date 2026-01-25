@@ -1,0 +1,1 @@
+Z:\ECOLE\FAT32\FAT32_RUST\fat32\target\release\libfat32.rlib: Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\boot_sector.rs Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\directory.rs Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\error.rs Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\fat_table.rs Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\filesystem.rs Z:\ECOLE\FAT32\FAT32_RUST\fat32\src\lib.rs
