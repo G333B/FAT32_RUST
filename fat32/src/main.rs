@@ -1,4 +1,4 @@
-// CLI pour le filesystem FAT32
+// src/main.rs - CLI pour FAT32
 use std::env;
 use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
@@ -61,12 +61,12 @@ fn print_help(program: &str) {
     println!("  {} disk.img cd /dossier", program);
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
         print_help(&args[0]);
-        return Ok(()); // ← Au lieu de process::exit(1)
+        process::exit(1);
     }
 
     let image_path = &args[1];
@@ -106,9 +106,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             } else {
                                 "FILE"
                             };
-                            println!("{} {:>10}  {}", 
-                                type_str, 
-                                entry.file_size(), 
+                            println!(
+                                "{} {:>10}  {}",
+                                type_str,
+                                entry.file_size(),
                                 entry.short_name()
                             );
                         }
@@ -118,12 +119,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Err(e) => Err(e),
             }
         }
-        
+
         "cat" | "more" => {
             if let Some(file) = args.get(3) {
                 match fs.read_file(file) {
                     Ok(data) => {
-                        io::stdout().write_all(&data).map_err(|_| Fat32Error::IoError)?;
+                        io::stdout()
+                            .write_all(&data)
+                            .map_err(|_| Fat32Error::IoError)?;
                         Ok(())
                     }
                     Err(e) => Err(e),
@@ -133,7 +136,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 process::exit(1);
             }
         }
-        
+
         "cd" => {
             if let Some(path) = args.get(3) {
                 fs.change_dir(path)?;
@@ -145,12 +148,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 process::exit(1);
             }
         }
-        
+
         "pwd" => {
             println!("Cluster du répertoire courant: {}", fs.current_dir());
             Ok(())
         }
-        
+
         _ => {
             eprintln!("Commande inconnue: {}", cmd);
             print_help(&args[0]);
@@ -158,9 +161,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-   if let Err(e) = result {
+    if let Err(e) = result {
         eprintln!("Erreur: {}", e);
-        return Err(*Box::new(e)); // ← Retourner l'erreur
+        process::exit(1);
     }
 
     Ok(())
